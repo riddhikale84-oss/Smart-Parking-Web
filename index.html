@@ -1,0 +1,2611 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<meta name="description" content="Smart Parking 2.0 - Advanced Automata-Based Parking & Access Control Simulator">
+
+<title>Smart Parking 2.0 | Advanced FAFL Simulator</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+
+<body>
+
+
+
+<div class="app-shell">
+
+
+
+<header class="topbar">
+
+  <div class="brand">
+
+    <div class="logo">Σ</div>
+
+
+
+    <div>
+
+      <h1>Smart Parking <span>2.0</span></h1>
+
+      <small>
+
+        ADVANCED AUTOMATA-BASED PARKING & ACCESS CONTROL
+
+      </small>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="top-actions">
+
+    <span class="live">
+
+      <i></i> SIMULATION LIVE
+
+    </span>
+
+
+
+    <button class="btn ghost" id="resetBtn">
+
+      ↻ Reset
+
+    </button>
+
+
+
+    <button class="btn primary" id="reportBtn">
+
+      ▣ Report
+
+    </button>
+
+  </div>
+
+</header>
+
+
+
+
+
+<nav class="tabs">
+
+
+
+<button class="tab active" data-tab="dashboard">
+
+Dashboard
+
+</button>
+
+
+
+<button class="tab" data-tab="dfa">
+
+DFA Engine
+
+</button>
+
+
+
+<button class="tab" data-tab="nfa">
+
+NFA Engine
+
+</button>
+
+
+
+<button class="tab" data-tab="regex">
+
+Regex Lab
+
+</button>
+
+
+
+<button class="tab" data-tab="payment">
+
+Payment Automaton
+
+</button>
+
+
+
+<button class="tab" data-tab="security">
+
+Security FSM
+
+</button>
+
+
+
+<button class="tab" data-tab="report">
+
+Report
+
+</button>
+
+
+
+</nav>
+
+
+
+
+
+<main>
+
+
+
+<!-- ================= DASHBOARD ================= -->
+
+
+
+<section id="dashboard" class="page active">
+
+
+
+<div class="hero">
+
+
+
+<div>
+
+
+
+<label>FINITE AUTOMATA + FORMAL LANGUAGES</label>
+
+
+
+<h2>
+
+One parking system.<br>
+
+<em>Multiple automata.</em>
+
+</h2>
+
+
+
+<p>
+
+Vehicle validation, capacity control, payment,
+
+exact-vehicle exit and security are connected
+
+through live finite-state machines.
+
+</p>
+
+
+
+</div>
+
+
+
+<div class="hero-badge">
+
+<strong>FAFL</strong>
+
+<span>DFA · NFA · Regex · FSM</span>
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<!-- STATISTICS -->
+
+
+
+<div class="stats">
+
+
+
+<div>
+
+<span>Available Slots</span>
+
+<strong id="availableSlots">12</strong>
+
+<small>of <b id="totalSlots">12</b></small>
+
+</div>
+
+
+
+<div>
+
+<span>Occupied</span>
+
+<strong id="occupiedSlots">0</strong>
+
+<small>vehicles parked</small>
+
+</div>
+
+
+
+<div>
+
+<span>Revenue</span>
+
+<strong id="revenue">₹0</strong>
+
+<small>revenue from hourly parking fees</small>
+
+</div>
+
+
+
+<div>
+
+<span>Security Events</span>
+
+<strong id="securityEvents">0</strong>
+
+<small>detected attempts</small>
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div class="grid2">
+
+
+
+<!-- PARKING -->
+
+
+
+<div class="panel parking-panel">
+
+
+
+<div class="panel-head">
+
+
+
+<div>
+
+<label>01 · LIVE PARKING</label>
+
+<h2>Parking Capacity Automaton</h2>
+
+</div>
+
+
+
+<span class="chip" id="capacityChip">
+
+0 / 12
+
+</span>
+
+
+
+</div>
+
+
+
+
+
+<!-- INCOMING VEHICLE -->
+
+
+
+<div class="incoming" id="incomingVehicle">
+
+
+
+<div class="car">
+
+🚗
+
+</div>
+
+
+
+<div>
+
+
+
+<small>INCOMING VEHICLE</small>
+
+
+
+<b id="incomingPlate">
+
+—
+
+</b>
+
+
+
+<span id="incomingStatus">
+
+Waiting for vehicle
+
+</span>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<!-- CONTROLS -->
+
+
+
+<div class="entry-controls">
+
+
+
+<div>
+
+
+
+<label>Vehicle Number</label>
+
+
+
+<input
+
+id="vehicleInput"
+
+value="MH12AB1234"
+
+maxlength="10"
+
+placeholder="e.g. MH12AB1234">
+
+
+
+</div>
+
+
+
+<button
+
+class="btn primary"
+
+id="simulateVehicleBtn">
+
+
+
+🚗 Park Vehicle
+
+
+
+</button>
+
+
+
+<button
+
+class="btn ghost"
+
+id="autoVehicleBtn">
+
+
+
+＋ Auto Vehicle
+
+
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+<!-- CAPACITY -->
+
+
+
+<div class="capacity">
+
+
+
+<div class="ring">
+
+
+
+<div>
+
+
+
+<strong id="capacityPercent">
+
+0%
+
+</strong>
+
+
+
+<span>
+
+occupied
+
+</span>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div class="capacity-copy">
+
+
+
+<h3 id="capacityStatus">
+
+Parking available
+
+</h3>
+
+
+
+<p>
+
+12 fixed slots. The capacity automaton
+
+never permits occupancy above 12.
+
+</p>
+
+
+
+<div class="bar">
+
+<i id="capacityBar"></i>
+
+</div>
+
+
+
+<small id="capacityText">
+
+0 / 12 slots occupied
+
+</small>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div class="slot-legend">
+
+
+
+<span>🟩 Free</span>
+
+<span>🟥 Occupied</span>
+
+<span>🟨 Selected exit</span>
+
+
+
+</div>
+
+
+
+
+
+<div
+
+class="slots"
+
+id="slotGrid">
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<!-- ACTIVITY -->
+
+
+
+<div class="panel activity-panel">
+
+
+
+<div class="panel-head">
+
+
+
+<div>
+
+<label>02 · ACTIVITY LOG</label>
+
+<h2>Automaton Activity</h2>
+
+</div>
+
+
+
+<span class="status-dot">
+
+LIVE
+
+</span>
+
+
+
+</div>
+
+
+
+<div
+
+id="activityLog"
+
+class="log">
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<!-- EXIT + LEDGER -->
+
+
+
+<div class="grid2">
+
+
+
+<div class="panel">
+
+
+
+<div class="panel-head">
+
+
+
+<div>
+
+<label>03 · EXIT CONTROL</label>
+
+<h2>Exact Vehicle Exit</h2>
+
+</div>
+
+
+
+<span class="chip">
+
+₹20 / hour
+
+</span>
+
+
+
+</div>
+
+
+
+<p class="muted">
+
+
+
+Enter the exact parked vehicle number.
+
+The selected vehicle is released only after
+
+the calculated hourly payment is completed.
+
+
+
+</p>
+
+
+
+
+
+<div class="inputrow">
+
+
+
+<input
+
+id="exitVehicleInput"
+
+placeholder="Enter parked vehicle number">
+
+
+
+<button
+
+class="btn primary"
+
+id="requestExitBtn">
+
+
+
+↪ Request Exit
+
+
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+<div
+
+class="exit-card"
+
+id="exitCard">
+
+
+
+<span>qE0</span>
+
+
+
+<b>
+
+No exit request
+
+</b>
+
+
+
+<small>
+
+Payment is required before slot release.
+
+</small>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div class="panel">
+
+
+
+<div class="panel-head">
+
+
+
+<div>
+
+<label>04 · SELECTED VEHICLE</label>
+
+<h2>Vehicle Ledger</h2>
+
+</div>
+
+
+
+</div>
+
+
+
+<div
+
+class="ledger"
+
+id="vehicleLedger">
+
+
+
+<div class="empty">
+
+No vehicles parked yet.
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<!-- MAIN FSM -->
+
+
+
+<div class="panel state-panel">
+
+
+
+<div class="panel-head">
+
+
+
+<div>
+
+<label>05 · LIVE ENTRY / EXIT FSM</label>
+
+
+
+<h2>
+
+Vehicle Access Flow
+
+</h2>
+
+
+
+</div>
+
+
+
+<span>
+
+Current:
+
+<b id="globalState">
+
+q0
+
+</b>
+
+</span>
+
+
+
+</div>
+
+
+
+
+
+<div
+
+class="state-flow"
+
+id="mainStateMachine">
+
+
+
+<div class="state current" data-state="q0">
+
+<b>q0</b>
+
+<small>Outside</small>
+
+</div>
+
+
+
+<span class="arrow">→</span>
+
+
+
+<div class="state" data-state="q1">
+
+<b>q1</b>
+
+<small>Detected</small>
+
+</div>
+
+
+
+<span class="arrow">→</span>
+
+
+
+<div class="state" data-state="q2">
+
+<b>q2</b>
+
+<small>Validated</small>
+
+</div>
+
+
+
+<span class="arrow">→</span>
+
+
+
+<div class="state" data-state="q3">
+
+<b>q3</b>
+
+<small>Slot Check</small>
+
+</div>
+
+
+
+<span class="arrow">→</span>
+
+
+
+<div class="state" data-state="q4">
+
+<b>q4</b>
+
+<small>Allocated</small>
+
+</div>
+
+
+
+<span class="arrow">→</span>
+
+
+
+<div class="state" data-state="q5">
+
+<b>q5</b>
+
+<small>Parked</small>
+
+</div>
+
+
+
+<span class="arrow">→</span>
+
+
+
+<div class="state" data-state="q6">
+
+<b>q6</b>
+
+<small>Exit Request</small>
+
+</div>
+
+
+
+<span class="arrow">→</span>
+
+
+
+<div class="state" data-state="q7">
+
+<b>q7</b>
+
+<small>Payment</small>
+
+</div>
+
+
+
+<span class="arrow">→</span>
+
+
+
+<div class="state accept" data-state="q8">
+
+<b>q8</b>
+
+<small>Exited</small>
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+<!-- ================= DFA ================= -->
+
+
+
+<section id="dfa" class="page">
+
+
+
+<div class="title">
+
+
+
+<label>
+
+DETERMINISTIC FINITE AUTOMATON
+
+</label>
+
+
+
+<h1>
+
+DFA Engine
+
+</h1>
+
+
+
+<p>
+
+Exactly one next state is selected
+
+for each valid input symbol.
+
+</p>
+
+
+
+</div>
+
+
+
+
+
+<div class="grid2">
+
+
+
+<div class="panel">
+
+
+
+<div class="panel-head">
+
+
+
+<h2>
+
+Run Vehicle DFA
+
+</h2>
+
+
+
+<span class="chip">
+
+10-symbol plate
+
+</span>
+
+
+
+</div>
+
+
+
+<label>
+
+Vehicle input
+
+</label>
+
+
+
+<div class="inputrow">
+
+
+
+<input
+
+id="dfaInput"
+
+value="MH12AB1234"
+
+maxlength="10">
+
+
+
+<button
+
+class="btn primary"
+
+id="runDfa">
+
+
+
+Run DFA
+
+
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+<div
+
+class="chars"
+
+id="dfaDisplay">
+
+</div>
+
+
+
+
+
+<div
+
+class="result"
+
+id="dfaResult">
+
+
+
+Ready.
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div class="panel">
+
+
+
+<div class="panel-head">
+
+
+
+<h2>
+
+Transition Table
+
+</h2>
+
+
+
+<span class="chip">
+
+δ(q,a)
+
+</span>
+
+
+
+</div>
+
+
+
+
+
+<div class="table-wrap">
+
+
+
+<table>
+
+
+
+<thead>
+
+
+
+<tr>
+
+<th>State</th>
+
+<th>Input</th>
+
+<th>Next</th>
+
+<th>Meaning</th>
+
+</tr>
+
+
+
+</thead>
+
+
+
+<tbody
+
+id="dfaTable">
+
+</tbody>
+
+
+
+</table>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div class="panel">
+
+
+
+<h2>
+
+Formal Definition
+
+</h2>
+
+
+
+<div class="formula">
+
+M = (Q, Σ, δ, q₀, F)
+
+</div>
+
+
+
+<div class="definition">
+
+
+
+<div>
+
+<b>Q</b>
+
+Finite states
+
+</div>
+
+
+
+<div>
+
+<b>Σ</b>
+
+A–Z, 0–9
+
+</div>
+
+
+
+<div>
+
+<b>δ</b>
+
+Transition function
+
+</div>
+
+
+
+<div>
+
+<b>q₀</b>
+
+Initial state
+
+</div>
+
+
+
+<div>
+
+<b>F</b>
+
+Accept state
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+<!-- ================= NFA ================= -->
+
+
+
+<section id="nfa" class="page">
+
+
+
+<div class="title">
+
+
+
+<label>
+
+NON-DETERMINISTIC FINITE AUTOMATON
+
+</label>
+
+
+
+<h1>
+
+NFA Engine
+
+</h1>
+
+
+
+<p>
+
+Demonstrates multiple possible transitions
+
+before reaching an accepting path.
+
+</p>
+
+
+
+</div>
+
+
+
+
+
+<div class="grid2">
+
+
+
+<div class="panel">
+
+
+
+<div class="panel-head">
+
+
+
+<h2>
+
+NFA Simulation
+
+</h2>
+
+
+
+<span class="chip">
+
+Multiple paths
+
+</span>
+
+
+
+</div>
+
+
+
+<label>
+
+Input string
+
+</label>
+
+
+
+<div class="inputrow">
+
+
+
+<input
+
+id="nfaInput"
+
+value="MH12AB1234"
+
+maxlength="10">
+
+
+
+<button
+
+class="btn primary"
+
+id="runNfa">
+
+
+
+Run NFA
+
+
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+<div
+
+class="nfa"
+
+id="nfaVisual">
+
+</div>
+
+
+
+
+
+<div
+
+class="result"
+
+id="nfaResult">
+
+
+
+NFA ready.
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div class="panel">
+
+
+
+<div class="panel-head">
+
+
+
+<h2>
+
+NFA vs DFA
+
+</h2>
+
+
+
+</div>
+
+
+
+
+
+<div class="compare">
+
+
+
+<div>
+
+
+
+<b>DFA</b>
+
+
+
+<p>
+
+One active state for a given
+
+state/input pair.
+
+</p>
+
+
+
+<em>
+
+Single path
+
+</em>
+
+
+
+</div>
+
+
+
+
+
+<div>
+
+
+
+<b>NFA</b>
+
+
+
+<p>
+
+Several possible next states
+
+can exist.
+
+</p>
+
+
+
+<em>
+
+Multiple paths
+
+</em>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div class="mini-nfa">
+
+
+
+<span>q0</span>
+
+<b>↗</b>
+
+<span>q1</span>
+
+<b>↘</b>
+
+<span>q2</span>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+<!-- ================= REGEX ================= -->
+
+
+
+<section id="regex" class="page">
+
+
+
+<div class="title">
+
+
+
+<label>
+
+REGULAR LANGUAGE
+
+</label>
+
+
+
+<h1>
+
+Regex Lab
+
+</h1>
+
+
+
+<p>
+
+Validate the same vehicle language using
+
+a regular expression.
+
+</p>
+
+
+
+</div>
+
+
+
+
+
+<div class="grid2">
+
+
+
+<div class="panel">
+
+
+
+<div class="panel-head">
+
+
+
+<h2>
+
+Vehicle Number Validator
+
+</h2>
+
+
+
+<span class="chip">
+
+Regex
+
+</span>
+
+
+
+</div>
+
+
+
+
+
+<label>
+
+Regular expression
+
+</label>
+
+
+
+<input
+
+id="regexPattern"
+
+value="^[A-Z]{2}[0-9]{2}[A-Z]{2}[0-9]{4}$">
+
+
+
+
+
+<label>
+
+Test string
+
+</label>
+
+
+
+<div class="inputrow">
+
+
+
+<input
+
+id="regexInput"
+
+value="MH12AB1234">
+
+
+
+<button
+
+class="btn primary"
+
+id="runRegex">
+
+
+
+Validate
+
+
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+<div class="meter">
+
+<i id="regexMeter"></i>
+
+</div>
+
+
+
+
+
+<div
+
+class="result"
+
+id="regexResult">
+
+
+
+Ready.
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div class="panel">
+
+
+
+<h2>
+
+Language L
+
+</h2>
+
+
+
+<div class="language">
+
+
+
+<p>
+
+<b>Pattern:</b>
+
+two letters + two digits +
+
+two letters + four digits
+
+</p>
+
+
+
+<p>
+
+<b>Accepted:</b>
+
+MH12AB1234
+
+</p>
+
+
+
+<p>
+
+<b>Rejected:</b>
+
+M123XYZ
+
+</p>
+
+
+
+<p>
+
+<b>Alphabet:</b>
+
+{A–Z, 0–9}
+
+</p>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+<!-- ================= PAYMENT ================= -->
+
+
+
+<section id="payment" class="page">
+
+
+
+<div class="title">
+
+
+
+<label>
+
+FINITE STATE PAYMENT
+
+</label>
+
+
+
+<h1>
+
+Payment Automaton
+
+</h1>
+
+
+
+<p>
+
+₹20 per hour. The fee is calculated from the parking duration.
+
+Partial payments are accumulated and overpayment returns change.
+
+</p>
+
+
+
+</div>
+
+
+
+
+
+<div class="grid2">
+
+
+
+<div class="panel">
+
+
+
+<div class="fee">
+
+
+
+<span>
+
+REQUIRED FEE
+
+</span>
+
+
+
+<strong id="requiredFee">₹20</strong>
+
+
+
+<span>
+
+Current payment:
+
+<b id="paidDisplay">₹0</b>
+
+</span>
+
+
+
+</div>
+
+
+
+
+
+<div
+
+class="payment-target"
+
+id="paymentTarget">
+
+
+
+No vehicle selected for payment.
+
+
+
+</div>
+
+
+
+
+
+<div class="money">
+
+
+
+<button data-money="10">
+
++ ₹10
+
+</button>
+
+
+
+<button data-money="20">
+
++ ₹20
+
+</button>
+
+
+
+<button data-money="30">
+
++ ₹30
+
+</button>
+
+
+
+<button data-money="40">
+
++ ₹40
+
+</button>
+
+
+
+<button data-money="50">
+
++ ₹50
+
+</button>
+
+
+
+<button data-money="100">
+
++ ₹100
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+<div class="inputrow">
+
+
+
+<button
+
+class="btn primary"
+
+id="completePayment">
+
+
+
+✓ Complete Payment
+
+
+
+</button>
+
+
+
+<button
+
+class="btn ghost"
+
+id="resetPayment">
+
+
+
+Reset Payment
+
+
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+<div
+
+class="result"
+
+id="paymentResult">
+
+
+
+qP0 — waiting for payment.
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div class="panel">
+
+
+
+<div class="panel-head">
+
+
+
+<h2>
+
+Payment State Machine
+
+</h2>
+
+
+
+<span class="chip">
+
+qP0 ... qPn
+
+</span>
+
+
+
+</div>
+
+
+
+
+
+<div
+
+class="paystates"
+
+id="paymentStates">
+
+</div>
+
+
+
+
+
+<div class="table-wrap">
+
+
+
+<table>
+
+
+
+<thead>
+
+
+
+<tr>
+
+<th>State</th>
+
+<th>Amount</th>
+
+<th>Condition</th>
+
+</tr>
+
+
+
+</thead>
+
+
+
+<tbody
+
+id="paymentTable">
+
+</tbody>
+
+
+
+</table>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div class="panel">
+
+
+
+<h2>
+
+Example: Partial Payment
+
+</h2>
+
+
+
+<p class="muted">
+
+
+
+Press
+
+<b>₹30 → ₹20 → ₹20 → ₹20</b>.
+
+
+
+Total = ₹90.
+
+
+
+The automaton reaches acceptance at ₹20+,
+
+and ₹10 change is returned.
+
+
+
+Revenue increases by only ₹20.
+
+
+
+</p>
+
+
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+<!-- ================= SECURITY ================= -->
+
+
+
+<section id="security" class="page">
+
+
+
+<div class="title">
+
+
+
+<label>
+
+SECURITY FINITE STATE MACHINE
+
+</label>
+
+
+
+<h1>
+
+Security FSM
+
+</h1>
+
+
+
+<p>
+
+Invalid vehicle numbers, duplicates,
+
+unpaid exits and nonexistent vehicles
+
+are recorded as security events.
+
+</p>
+
+
+
+</div>
+
+
+
+
+
+<div class="grid2">
+
+
+
+<div class="panel">
+
+
+
+<div
+
+class="security"
+
+id="securityState">
+
+
+
+<span>
+
+qS0
+
+</span>
+
+
+
+<strong>
+
+NORMAL
+
+</strong>
+
+
+
+<small>
+
+System secure
+
+</small>
+
+
+
+</div>
+
+
+
+
+
+<div class="security-flow">
+
+
+
+<span>
+
+qS0 NORMAL
+
+</span>
+
+
+
+<b>
+
+1st fail →
+
+</b>
+
+
+
+<span>
+
+qS1 WARNING
+
+</span>
+
+
+
+<b>
+
+2nd →
+
+</b>
+
+
+
+<span>
+
+qS2 ALERT
+
+</span>
+
+
+
+<b>
+
+3rd →
+
+</b>
+
+
+
+<span class="blocked-text">
+
+qS3 BLOCKED
+
+</span>
+
+
+
+</div>
+
+
+
+
+
+<button
+
+class="btn ghost"
+
+id="clearSecurity">
+
+
+
+Clear / Reset Security
+
+
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+<div class="panel">
+
+
+
+<div class="panel-head">
+
+
+
+<h2>
+
+Security / Activity Events
+
+</h2>
+
+
+
+<span class="chip">
+
+Live
+
+</span>
+
+
+
+</div>
+
+
+
+<div
+
+id="securityLog"
+
+class="security-log">
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+<!-- ================= REPORT ================= -->
+
+
+
+<section id="report" class="page">
+
+
+
+<div class="title">
+
+
+
+<label>
+
+EVALUATION OUTPUT
+
+</label>
+
+
+
+<h1>
+
+Simulation Report
+
+</h1>
+
+
+
+<p>
+
+Current parking, payment, security and
+
+automata execution state.
+
+</p>
+
+
+
+</div>
+
+
+
+
+
+<div
+
+class="report"
+
+id="reportPreview">
+
+</div>
+
+
+
+
+
+<div class="report-actions">
+
+
+
+<button
+
+class="btn primary"
+
+id="printReport">
+
+
+
+Print / Save PDF
+
+
+
+</button>
+
+
+
+<button
+
+class="btn ghost"
+
+id="downloadReport">
+
+
+
+Download JSON
+
+
+
+</button>
+
+
+
+</div>
+
+
+
+</section>
+
+
+
+</main>
+
+
+
+
+
+<footer>
+
+
+
+<span>
+
+Smart Parking 2.0
+
+</span>
+
+
+
+<span>
+
+Finite Automata & Formal Languages · Advanced ISE Project
+
+</span>
+
+
+
+<span>
+
+© <span id="year"></span>
+
+</span>
+
+
+
+</footer>
+
+
+
+</div>
+
+
+
+
+
+<div
+
+class="toast"
+
+id="toast">
+
+</div>
+
+
+
+
+
+<script src="script.js"></script>
+
+
+
+</body>
+
+</html>
